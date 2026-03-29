@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, send_file
-import sqlite3
 
 app = Flask(__name__)
 
