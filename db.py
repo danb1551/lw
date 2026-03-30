@@ -31,11 +31,11 @@ def init_db():
 init_db()
 
 
-# # create a table  
+# # create a table
 # cu.execute("create table lang(name, first_appeared)")
 
-# # insert values into a table  
+# # insert values into a table
 # cu.execute("insert into lang values (?, ?)", ("C", 1972))
-# # execute a query and iterate over the result  
+# # execute a query and iterate over the result
 # for row in cu.execute("select * from lang"):
 #     print(row)
