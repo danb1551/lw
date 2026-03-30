@@ -56,3 +56,11 @@ def editMessage(uuid, message):
                     SET zprava = ?, read = ?, edited = ?, editedAt = ?
                     WHERE uuid = ?
                 """, (message, 1, 1, time.time(), uuid))
+# # create a table
+# cu.execute("create table lang(name, first_appeared)")
+
+# # insert values into a table
+# cu.execute("insert into lang values (?, ?)", ("C", 1972))
+# # execute a query and iterate over the result
+# for row in cu.execute("select * from lang"):
+#     print(row)
