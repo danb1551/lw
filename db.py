@@ -11,7 +11,7 @@ def provedPrikaz(cmd: str, params: tuple | None = None, vraci: bool = False, kol
     else:
         cursor.execute(cmd)
     # well, jestli je tady chyba...hodně štěstí s debugováním
-    fetched_data = cursor.fetchall() if vraci and kolik is None else cursor.fetchmany(int(kolik)) if vraci and int(kolik) > 0 else None
+    fetched_data = cursor.fetchall() if vraci and kolik is None else cursor.fetchmany(int(kolik)) if vraci and int(kolik) > 1 else cursor.fetchone() if vraci and int(kolik) == 1 else None
     conn.commit()
     cursor.close()
     conn.close()
@@ -43,12 +43,26 @@ def createMessage(message):
                     ) VALUES ( ?, ?, ?, ?, ?, ? )
                 """, (str(uuid.uuid4()), message, False, time.time(), False, 0))
 
-def getMessages():
-    messages = provedPrikaz("""
+def getMessages() -> list[tuple] | None:
+    return provedPrikaz("""
                                 SELECT uuid, zprava, read, createdAt, edited, editedAt
                                 FROM messages
                                 ORDER BY createdAt
-                """, vraci=False)
+                """, vraci=True)
+
+def getMessage(uuid: str) -> tuple[str | int] | None:
+    message = provedPrikaz("""
+                                SELECT zprava, read, createdAt, edited, editedAt
+                                FROM messages
+                """, vraci=True, kolik=0)
+    return {
+        "uuid": uuid,
+        "message": message[0],
+        "read": message[1],
+        "createdAt": message[2],
+        "edited": message[3],
+        "editedAt": message[3],
+    } if message is not None else None
 
 def editMessage(uuid, message):
     provedPrikaz("""
@@ -56,11 +70,11 @@ def editMessage(uuid, message):
                     SET zprava = ?, read = ?, edited = ?, editedAt = ?
                     WHERE uuid = ?
                 """, (message, 1, 1, time.time(), uuid))
-# # create a table
-# cu.execute("create table lang(name, first_appeared)")
 
-# # insert values into a table
-# cu.execute("insert into lang values (?, ?)", ("C", 1972))
-# # execute a query and iterate over the result
-# for row in cu.execute("select * from lang"):
-#     print(row)
+def deleteMessage(uuid: str):
+    provedPrikaz("""
+                    DELETE messages
+                    WHERE uuid = ?
+                """, (uuid, ))
+    # BTW, tahle čárka    ^    na konci je třeba, protože to udělá z jedné proměnné tuple,
+    # kterou ta funkce potřebuje k fungování

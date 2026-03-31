@@ -14,26 +14,26 @@
 
 - vrací všechny zprávy přihlášenému uživateli
 
-- nepřihlášenému 403
+- nepřihlášenému 403 (forbiden)
 
 ### POST /messages
 
-- přijme zprávu a vrací 201 při správném zaosání do databáze
+- přijme zprávu a vrací 201 (created) při správném zapsání do databáze
 
-- při chybě zpracování zprávy vrací 500
+- při chybě zpracování zprávy vrací 500 (internal server error)
 
-## [GET, PUT, DELETE] /message/<uuid>
+## [GET, PUT, DELETE] /message/&lt;uuid&gt;
 
-### GET /message/<uuid>
+### GET /message/&lt;uuid&gt;
 
 - vrací vybranou zprávu se všemi informacemi
 
-- 404 při neexistující zprávě
+- 404 (not found) při neexistující zprávě
 
-### PUT /message/<uuid>
+### PUT /message/&lt;uuid&gt;
 
-- upraví zprávu podle nových dat v přijmutém dotazu
+- upraví zprávu podle nových dat v přijmutém dotazu a vrací 204 (no content)
 
-### DELETE /message/<uuid>
+### DELETE /message/&lt;uuid&gt;
 
-- smaže dannou zprávu a vrací 204
+- smaže dannou zprávu a vrací 204 (no content)
